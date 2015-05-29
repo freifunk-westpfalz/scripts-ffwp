@@ -15,8 +15,6 @@ git pull
 cd "${METADIR}"
 git pull
 
-"${SCRIPTDIR}"/gentinccfg "$1"
-
 # generate bgp config
 # pwd should be meta repo
 "${ICVPNSCRIPTDIR}"/mkbgp -f bird -4 -s . -d bgp_icvpn -x westpfalz > "${BIRDDIR}"/bird_bgp.conf
