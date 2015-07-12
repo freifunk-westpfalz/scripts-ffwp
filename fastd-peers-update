@@ -8,23 +8,26 @@
 # 3. ggf fastd keys neu einlesen
 #
 # cron job anlegen
-# */15 * * * * /root/scripts/fastd-peers-update > /root/scripts/log/fastd-peers-update.log 2> /root/scripts/log/fastd-peers-update.err
+# */15 * * * * /home/freifunk/scripts/fastd-peers-update > /var/log/fastd-peers-update.log 2> /var/log/fastd-peers-update.err
 ################################################################################
 #CHANGELOG
 # V1.0 2014-01-07 little.ben
 #   - Ersterstellung
 # V1.1 2015-03-06 paalsteek
 #   - Ordner über Variablen besser konfigurierbar
+# V1.2 2015-07-12 zaunei
+#   - Gruppe ffadm in freifunk geaendert
+#   - Logs werden nun in /var/log/ hinterlegt
 ################################################################################
 
 PEERSDIR="/etc/fastd/ffwp-mesh-vpn/peers/"
-LOGDIR="/root/scripts/log/"
+LOGDIR="/var/log/"
 
 # in peers-Ordner wechseln
 cd "${PEERSDIR}"
 
 # git sync
-git pull >"${LOGDIR}"/fastd-peers-update-pull.log 2>"${LOGDIR}"/fastd-peers-update-pull.err
+git pull >"${LOGDIR}"fastd-peers-update-pull.log 2>"${LOGDIR}"fastd-peers-update-pull.err
 #git pull
 
 ################################################################################
@@ -32,11 +35,11 @@ git pull >"${LOGDIR}"/fastd-peers-update-pull.log 2>"${LOGDIR}"/fastd-peers-upda
 # Rechte und Besitzer aendern bei allen Dateien im peers-Ordner
 # (ausser im Unterordner .git)
 find -type f ! -path "*.git*" -exec chmod 664 {} \;
-find -type f ! -path "*.git*" -exec chown :ffadm {} \;
+find -type f ! -path "*.git*" -exec chown :freifunk {} \;
 cd ..
 
 # Rechte und Besitzer des peers-Ordners ansich aendern
-chown :ffadm peers/
+chown :freifunk peers/
 chmod 755 peers/
 
 ################################################################################
@@ -49,8 +52,7 @@ S2='Already up-to-date.'
 
 PID=`pidof fastd`
 
-if [ "$S1" != "$S2" ];
-then
+if [ "$S1" != "$S2" ];then
         #/usr/bin/pkill -HUP fastd  #pkill geht nicht im cron
         kill -s HUP $PID
         logger "fastd keys neu eingelesen"
@@ -58,4 +60,3 @@ then
 fi
 
 exit 0
-
