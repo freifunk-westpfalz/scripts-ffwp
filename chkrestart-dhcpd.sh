@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Author: paalsteek
 # This script restarts isc-dhcp-server if the static config changed
@@ -12,6 +12,7 @@ FILENAME=$1
 
 # read mtime from last run
 OLDMTIME=`< "$FILENAME".stat`
+OLDMTIME=${OLDMTIME:-0}
 
 # get current mtime
 NEWMTIME=`stat -L -c '%Y' "$FILENAME"`
