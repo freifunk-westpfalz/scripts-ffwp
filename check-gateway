@@ -1,0 +1,33 @@
+#!/bin/bash
+INTERFACE=tun0
+shopt -s nullglob
+
+#pruefen ob IF existiert, sonst openvpn restart
+IFTUN=`/sbin/ifconfig |grep tun0|awk '{print $1}'`
+if [ "$INTERFACE" != "$IFTUN" ];
+then
+        #/usr/sbin/service openvpn restart
+        /etc/init.d/openvpn restart
+        logger "openvpn neu gestartet"
+        #echo "openvpn neu gestartet"
+fi
+
+#pruefen ob Tunnel steht, sonst GW Status -> off
+ping -q -I $INTERFACE 8.8.8.8 -c 4 -i 1 -W 5 >/dev/null 2>&1
+
+if test $? -eq 0; then
+NEW_STATE=server
+else
+NEW_STATE=off
+fi
+
+for MESH in /sys/class/net/*/mesh; do
+OLD_STATE="$(cat $MESH/gw_mode)"
+[ "$OLD_STATE" == "$NEW_STATE" ] && continue
+echo $NEW_STATE > $MESH/gw_mode
+#echo 54MBit/54MBit > $MESH/gw_bandwidth
+#echo 2048KBit/512KBit > $MESH/gw_bandwidth
+echo 96MBit/96MBit > $MESH/gw_bandwidth
+
+logger "batman gateway mode changed from $OLD_STATE to $NEW_STATE"
+done
