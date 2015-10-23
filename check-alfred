@@ -1,0 +1,30 @@
+
+#!/bin/bash
+
+# ----------------------------------------------------------------------------
+# Pruefung ob alfred laueft, ggf Neustart
+# ----------------------------------------------------------------------------
+# Skript preuft ob alfred in der Prozesstabelle ist
+# falls nein, wird er versucht mit restart auszufuehren
+# ----------------------------------------------------------------------------
+# little.ben 2015-02-02
+# little.ben 2015-10-23: Ergaenzung loeschen alfred.*
+# ----------------------------------------------------------------------------
+
+IS_RUN_ALFRED=`ps -ef|grep alfred|grep br-ffwp|awk '{print $10}'`
+#IS_RUN_ALFRED=`ps -ef|grep alfred|grep -v grep|awk '{print $10}'`
+
+if [[ "$IS_RUN_ALFRED" == "br-ffwp" ]]; then
+    echo "check-alfred: alfred laeuft"
+    #logger "check-alfred: alfred laeuft"
+else
+    echo "check-alfred: alfred laueft NICHT"
+    logger "check-alfred: alfred laueft NICHT -> restart ausfuehren"
+    /usr/sbin/service alfred stop
+    rm /var/run/alfred.*
+    /usr/sbin/service alfred start
+fi
+
+
+
+
