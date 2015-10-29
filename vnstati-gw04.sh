@@ -3,7 +3,7 @@ set -e
 
 IFACES=$(ls /var/lib/vnstat/)
 
-TARGET=/home/freifunk/vnstati/gw03/
+TARGET=/home/freifunk/vnstati/gw04/
 
 for iface in $IFACES; do
     /usr/bin/vnstati -i ${iface} -h -o ${TARGET}${iface}_hourly.png
