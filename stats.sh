@@ -20,5 +20,5 @@ gawk -v prefix=ffwp -v hostname=$(hostname) '{ time = systime(); print prefix ".
 gawk -v prefix=ffwp -v hostname=$(hostname) '{ time = systime(); print prefix "." hostname ".netfilter.conntrack.count " $1 " " time}' /proc/sys/net/ipv4/netfilter/ip_conntrack_count | nc -q0 $TARGET
 
 #/usr/bin/python /root/ff-tools/fastd/fastd-statistics.py -s /var/run/fastd-ffwp.status | gawk -v prefix=ffwp -v hostname=$(hostname) '{ time = systime(); print prefix "." hostname ".fastd-peers " $1 " " time "\n" prefix "." hostname ".fastd-connections " $2 " " time "\n" }' | nc -q0 $TARGET
-/usr/bin/python $DIR/fastd-statistics.py -s /var/run/fastd-ffwp.status | gawk -v prefix=ffwp -v hostname=$(hostname) '{ time = systime(); print prefix "." hostname ".fastd-connections " $1 " " time "\n" }'
+/usr/bin/python $DIR/fastd-statistics.py -s /var/run/fastd-ffwp.status | gawk -v prefix=ffwp -v hostname=$(hostname) '{ time = systime(); print prefix "." hostname ".fastd-connections " $1 " " time "\n" }' | nc -q0 $TARGET
 /usr/bin/python $DIR/dhcp_leases.py | nc -q0 $TARGET
