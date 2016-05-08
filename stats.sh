@@ -9,7 +9,7 @@ gawk -v interface=br-ffwp -v prefix=ffwp -v hostname=$(hostname) '/br-ffwp/ { ti
 
 gawk -v interface=ffwp-mesh-vpn -v prefix=ffwp -v hostname=$(hostname) '/ffwp-mesh-vpn/ { time = systime(); print prefix "." hostname "." interface ".rx.bytes " $2 " " time "\n" prefix "." hostname "." interface ".tx.bytes " $10 " " time "\n" prefix "." hostname "." interface ".rx.packets " $3 " " time "\n" prefix "." hostname "." interface ".tx.packets " $11 " " time "\n" }' /proc/net/dev | nc -q0 $TARGET
 
-gawk -v interface=tun0 -v prefix=ffwp -v hostname=$(hostname) '/tun0/ { time = systime(); print prefix "." hostname "." interface ".rx.bytes " $2 " " time "\n" prefix "." hostname "." interface ".tx.bytes " $10 " " time "\n" prefix "." hostname "." interface ".rx.packets " $3 " " time "\n" prefix "." hostname "." interface ".tx.packets " $11 " " time "\n" }' /proc/net/dev | nc -q0 $TARGET
+gawk -v interface=exit -v prefix=ffwp -v hostname=$(hostname) '/tun0/ { time = systime(); print prefix "." hostname "." interface ".rx.bytes " $2 " " time "\n" prefix "." hostname "." interface ".tx.bytes " $10 " " time "\n" prefix "." hostname "." interface ".rx.packets " $3 " " time "\n" prefix "." hostname "." interface ".tx.packets " $11 " " time "\n" }' /proc/net/dev | nc -q0 $TARGET
 
 gawk -v interface=icvpn -v prefix=ffwp -v hostname=$(hostname) '/icvpn/ { time = systime(); print prefix "." hostname "." interface ".rx.bytes " $2 " " time "\n" prefix "." hostname "." interface ".tx.bytes " $10 " " time "\n" prefix "." hostname "." interface ".rx.packets " $3 " " time "\n" prefix "." hostname "." interface ".tx.packets " $11 " " time "\n" }' /proc/net/dev | nc -q0 $TARGET
 
